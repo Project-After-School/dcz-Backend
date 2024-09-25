@@ -29,7 +29,7 @@ class UserLoginService:
                             class_num=xquare_user_data["class_num"],
                             num=xquare_user_data["num"],
                             birth_day=xquare_user_data["birth_day"],
-                            device_token=user_login_request.device_token,
+                            device_token=None,
                             profile=xquare_user_data.get("profile", None),  # profile 기본값을 None으로 설정
                             role=Role[xquare_user_data.get("role", "STU")]  # role 기본값을 "STU"로 설정 (필요에 따라 조정)
                         )

@@ -9,7 +9,7 @@ from user_login.exceptions import UserNotFoundException, PasswordMissMatchExcept
 
 router = APIRouter()
 
-@router.post("/login")
+@router.post("/user/login")
 def login(user_login_request: UserLoginRequest, db: Session = Depends(get_db)):
     try:
         user_login_service = UserLoginService(
