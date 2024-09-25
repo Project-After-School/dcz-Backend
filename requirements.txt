@@ -7,4 +7,10 @@ alembic
 bcrypt == 4.0.1
 psycopg2-binary
 postgresql
+<<<<<<< HEAD
 python-dotenv
+=======
+httpx
+jwt
+PyJWT
+>>>>>>> 6f67cdf03c28a136b4313720d0caf6cd223143ad
