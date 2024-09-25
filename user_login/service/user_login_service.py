@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from app.models.user import User as UserModel, Role
-from app.schemas.user import UserLoginRequest
-from app.client.xquare_client import XquareClient
-from app.security.jwt import JWTTokenProvider
+from user_login.models.user import User as UserModel, Role
+from user_login.schemas.user import UserLoginRequest
+from user_login.client.xquare_client import XquareClient
+from user_login.security.jwt import JWTTokenProvider
 from uuid import uuid4
 
 class UserLoginService:

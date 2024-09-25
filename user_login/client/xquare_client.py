@@ -9,7 +9,7 @@ class XquareClient:
     def xquare_user(self, account_id: str, password: str) -> dict:
         try:
             response = self.client.post("/user-data", json={"account_id": account_id, "password": password})
-            response.raise_for_status()  # 4xx 또는 5xx 오류가 발생하면 예외 발생
+            response.raise_for_status()  
             return response.json()
         except httpx.HTTPStatusError as e:
             raise HTTPException(status_code=e.response.status_code, detail=e.response.text)
