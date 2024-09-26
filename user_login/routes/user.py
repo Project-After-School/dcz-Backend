@@ -26,4 +26,3 @@ def login(user_login_request: UserLoginRequest, db: Session = Depends(get_db)):
     except Exception as e:
         print(f"Unexpected error: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
-
