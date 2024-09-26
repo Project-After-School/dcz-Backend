@@ -24,7 +24,7 @@ class User(Base):
     device_token = Column(String, nullable=True)
     profile = Column(String, nullable=True)
     role = Column(Enum(Role), nullable=False)
-    notifications = relationship("Notification", back_populates="author")  # 관계 설정
+    notifications = relationship("Notification", back_populates="author")  
 
 
 
