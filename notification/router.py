@@ -10,7 +10,7 @@ router = APIRouter()
 def create_notification(
     notification: schemas.NotificationCreate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)  # 인증 확인
+    current_user: models.User = Depends(get_current_user)  
 ):
     db_notification = models.Notification(**notification.dict(), author_id=current_user.id)
     
@@ -27,46 +27,61 @@ def update_notification(
     notification_id: int,
     notification_update: schemas.NotificationUpdate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)  # 인증 확인
+    current_user: models.User = Depends(get_current_user)  
 ):
     db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
     if db_notification is None:
         raise HTTPException(status_code=404, detail="존재하지 않는 공지사항 입니다.")
     
-    # 수정할 내용 업데이트
     db_notification.title = notification_update.title
     db_notification.content = notification_update.content
     db.commit()
     db.refresh(db_notification)
-    return db_notification
+
+    return {
+        **db_notification.__dict__,
+        "author_name": current_user.name  
+    }
+
 
 @router.get("/get_notification_all", response_model=list[schemas.Notification])
 def get_notification_all(
     skip: int = 0,
     limit: int = 10,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)  # 인증 확인
+    current_user: models.User = Depends(get_current_user)  
 ):
     notifications = db.query(models.Notification).offset(skip).limit(limit).all()
-    return notifications
+    
+    notifications_with_author = []
+    for notification in notifications:
+        notifications_with_author.append({
+            **notification.__dict__,
+            "author_name": current_user.name  
+        })
+
+    return notifications_with_author
 
 @router.get("/get_notification", response_model=schemas.Notification)
 def get_notification(
-    notification_id: int,
+    notification_title: str,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)  # 인증 확인
+    current_user: models.User = Depends(get_current_user)  
 ):
-    db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
+    db_notification = db.query(models.Notification).filter(models.Notification.title == notification_title).first()
     if db_notification is None:
         raise HTTPException(status_code=404, detail="존재하지 않는 공지사항 입니다.")
     
-    return db_notification
+    return {
+        **db_notification.__dict__,
+        "author_name": current_user.name
+    }
 
 @router.delete("/admin/delete_notification", response_model=schemas.Notification)
 def delete_notification(
     notification_id: int,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)  # 인증 확인
+    current_user: models.User = Depends(get_current_user)  
 ):
     db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
     if db_notification is None:
@@ -74,4 +89,35 @@ def delete_notification(
     
     db.delete(db_notification)
     db.commit()
-    return db_notification
+    
+    return {
+        **db_notification.__dict__,
+        "author_name": current_user.name
+    }
+
+@router.delete("/admin/delete_notification_all", response_model=list[schemas.Notification])
+def delete_notification_all(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)  
+):
+    
+    db_notifications = db.query(models.Notification).all()
+    
+    if not db_notifications:
+        raise HTTPException(status_code=404, detail="삭제할 공지사항이 없습니다.")
+    
+
+    deleted_notifications = [] 
+    for notification in db_notifications:
+        deleted_notifications.append({
+            "id": notification.id,
+            "title": notification.title,
+            "content": notification.content,
+            "author_id": notification.author_id,
+            "date": notification.date, 
+        })
+        db.delete(notification)
+    
+    db.commit()
+
+    return deleted_notifications  
