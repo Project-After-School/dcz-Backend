@@ -9,3 +9,5 @@ psycopg2-binary
 httpx
 jwt
 PyJWT
+python-dotenv
+python-multipart
