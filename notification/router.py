@@ -53,11 +53,17 @@ def get_notification_all(
 ):
     notifications = db.query(models.Notification).offset(skip).limit(limit).all()
     
+   
     notifications_with_author = []
     for notification in notifications:
+
+        author = db.query(models.User).filter(models.User.id == notification.author_id).first()
+        author_name = author.name
+        
         notifications_with_author.append({
             **notification.__dict__,
-            "author_name": current_user.name  
+            "author_name": author_name,
+            "date" : notification.date
         })
 
     return notifications_with_author
@@ -72,9 +78,15 @@ def get_notification(
     if db_notification is None:
         raise HTTPException(status_code=404, detail="존재하지 않는 공지사항 입니다.")
     
+    author = db.query(models.User).filter(models.User.id == db_notification.author_id).first()
+    if author is None:
+      raise HTTPException(status_code=404, detail="유저가 없습니다.")
     return {
         **db_notification.__dict__,
-        "author_name": current_user.name
+        "author_name": author.name,
+        "date": db_notification.date
+        
+        
     }
 
 @router.delete("/admin/delete_notification", response_model=schemas.Notification)
