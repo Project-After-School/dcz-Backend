@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
-
+from datetime import datetime
 
 class NotificationBase(BaseModel):
     title: str
@@ -14,6 +14,7 @@ class Notification(NotificationBase):
   id : int
   author_id: UUID
   author_name: str
+  date: datetime
   
   class Config:
     from_attributes = True
