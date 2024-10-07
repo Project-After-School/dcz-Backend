@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from user_login.routes import user as user_router
 from notification import router as notification_router
 from fastapi.middleware.cors import CORSMiddleware
-from admin_singin import admin_router
+from admin_signin import admin_router
 
 app =FastAPI(
   
