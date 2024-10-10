@@ -10,9 +10,11 @@ def get_admin(email: str, db: Session):
 
 def create_admin(new_admin: NewAdminForm, db: Session):
   admin = Teacher(
+    teacher_id = new_admin.teacher_id,
     teacher_name = new_admin.name,
     email = new_admin.email,
-    hashed_pw = pwd_context.hash(new_admin.password)
+    hashed_pw = pwd_context.hash(new_admin.password),
+    major = new_admin.major
   )
   db.add(admin)
   db.commit()

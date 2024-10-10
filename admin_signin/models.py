@@ -1,13 +1,20 @@
-from sqlalchemy import Column, Integer, VARCHAR, Enum
+from sqlalchemy import Column, Integer, VARCHAR, Enum, UUID, String, Date
+from sqlalchemy.orm import relationship
 from admin_signin.database import Base
-from user_login.models.user import Role
+# from user_login.models.user import Role
+import enum
+import uuid
+
+class Role(enum.Enum):
+    STU = "STU"
+    ADMIN = "ADMIN"
 
 class Teacher(Base):
-  __tablename__ = "teacher"
+  __tablename__ = "teacher_info"
 
-  teacher_id = Column(Integer, primary_key=True, autoincrement=True)
-  email = Column(VARCHAR(100), nullable=False, unique=True)
+  teacher_id = Column(VARCHAR(100), primary_key=True, nullable=False)
   teacher_name = Column(VARCHAR(5), nullable=False)
-  major = Column(VARCHAR(100), nullable=False, default='과목 없음')
+  email = Column(VARCHAR(100), nullable=False, unique=True)
+  major = Column(VARCHAR(100), nullable=True)
   hashed_pw = Column(VARCHAR(100), nullable=False)
   role = Column(Enum(Role), default=Role.ADMIN)

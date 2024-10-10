@@ -13,7 +13,7 @@ class Comments(CommentsBase):
   id : int
   author_id : UUID
   notification_id : int
-  date : datetime
+  data : datetime
   
   class Config:
     from_attributes = True
