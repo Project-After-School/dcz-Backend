@@ -33,7 +33,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-app/
+./app/ 
+# 아니 시발 이거 왜 안되냐고
+# app 폴더 하위 파일들도 다 무시돼야 하는거잖아 하ㅏㅏㅏㅏㅏㅏ이러;미너리ㅏ멍니ㅏ허아ㅣㅁㄴ호ㅓㅣㅑ조개ㅑ벼ㅗ세ㅑㅐㄱ돗ㅎ
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
