@@ -14,7 +14,7 @@ def create_comments(
   db: Session = Depends(get_db),
   current_user: models.User = Depends(get_current_user)  
 ):
-  notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first
+  notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
   if notification is None:
     raise HTTPException(status_code=404, detail="존재하지 않는 공지사항 입니다.")
   
