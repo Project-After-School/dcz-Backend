@@ -28,7 +28,7 @@ class User(Base):
     role = Column(SQLAEnum(Role), nullable=False)
 
     notifications = relationship("Notification", back_populates="author")
-
+    notification_comments = relationship("NotificationComments", back_populates="author")
 
 class Notification(Base):
     __tablename__ = "notification"
@@ -39,5 +39,18 @@ class Notification(Base):
     date = Column(DateTime, nullable=False, default=datetime.now)
     author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))
 
-    # 지연 임포트 사용
     author = relationship("User", back_populates="notifications")
+    comments = relationship("NotificationComments", back_populates="notification")
+
+class NotificationComments(Base):
+    __tablename__ = "notification_comments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(String, nullable=False)
+    date = Column(DateTime, nullable=False, default=datetime.now)
+
+    author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))
+    notification_id = Column(Integer, ForeignKey("notification.id"))
+
+    author = relationship("User", back_populates="notification_comments")
+    notification = relationship("Notification", back_populates="comments")
