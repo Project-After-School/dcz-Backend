@@ -1,10 +1,11 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Enum
-from notification.database import Base
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Date, Enum
 from sqlalchemy.dialects.postgresql import UUID
-from datetime import datetime
-import uuid
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from datetime import datetime
+from notification_comments.database import Base
 import enum
+import uuid
 
 class Role(enum.Enum):
     STU = "STU"
@@ -24,8 +25,10 @@ class User(Base):
     device_token = Column(String, nullable=True)
     profile = Column(String, nullable=True)
     role = Column(Enum(Role), nullable=False)
-    notifications = relationship("Notification", back_populates="author")  
-    content = relationship("NotificationComments", back_populates="author")
+
+    notifications = relationship("Notification", back_populates="author")
+    comments = relationship("NotificationComments", back_populates="author")
+
 
 class Notification(Base):
     __tablename__ = "notification"
@@ -33,26 +36,24 @@ class Notification(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     content = Column(String)
-    date = Column(DateTime, nullable=False , default=datetime.now)
-    author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))  
-    author = relationship("User", back_populates="notifications")  
-    content = relationship("NotificationComments", back_populates="notifications")
+    date = Column(DateTime, nullable=False, default=datetime.now)
+    author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))
+
+    author = relationship("User", back_populates="notifications")
+    comments = relationship("NotificationComments", back_populates="notification")
+
 
 
 
 class NotificationComments(Base):
     __tablename__ = "notification_comments"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     content = Column(String, nullable=False)
-    date = Column(DateTime, nullable=False , default=datetime.now)
-    
-    author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))  
+    date = Column(DateTime, nullable=False, default=datetime.now)
+
+    author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))
     notification_id = Column(Integer, ForeignKey("notification.id"))
-    
-    author = relationship("User", back_populates="notification_comments")
-    notification = relationship("Notification", back_populates="notification_comments")
 
-    
-
-    
+    author = relationship("User", back_populates="comments")
+    notification = relationship("Notification", back_populates="comments")
