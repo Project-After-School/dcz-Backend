@@ -11,9 +11,9 @@ class CreateComments(CommentsBase):
 
 class Comments(CommentsBase):
   id : int
-  author_id = UUID
-  notification_id = int
-  data = datetime
+  author_id : UUID
+  notification_id : int
+  date : datetime
   
   class Config:
     from_attributes = True
