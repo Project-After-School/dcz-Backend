@@ -1,10 +1,12 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Enum
-from notification.database import Base
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Enum as SQLAEnum, Date
 from sqlalchemy.dialects.postgresql import UUID
-from datetime import datetime
-import uuid
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from datetime import datetime
 import enum
+import uuid
+
+Base = declarative_base()
 
 class Role(enum.Enum):
     STU = "STU"
@@ -23,9 +25,9 @@ class User(Base):
     birth_day = Column(Date, nullable=False)
     device_token = Column(String, nullable=True)
     profile = Column(String, nullable=True)
-    role = Column(Enum(Role), nullable=False)
-    notifications = relationship("Notification", back_populates="author")  
+    role = Column(SQLAEnum(Role), nullable=False)
 
+    notifications = relationship("Notification", back_populates="author")
 
 
 class Notification(Base):
@@ -34,6 +36,8 @@ class Notification(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     content = Column(String)
-    date = Column(DateTime, nullable=False , default=datetime.now)
-    author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))  
-    author = relationship("User", back_populates="notifications")  
+    date = Column(DateTime, nullable=False, default=datetime.now)
+    author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))
+
+    # 지연 임포트 사용
+    author = relationship("User", back_populates="notifications")
