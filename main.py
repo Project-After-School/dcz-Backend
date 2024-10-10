@@ -3,7 +3,11 @@ from user_login.routes import user as user_router
 from notification import router as notification_router
 from notification_comments import router as comments_router
 from fastapi.middleware.cors import CORSMiddleware
+<<<<<<< HEAD
 # from admin_singin import admin_router
+=======
+from admin_signin import admin_router
+>>>>>>> 8aa17f242076fd08e6ffc845e0cb19d64cd824fc
 
 app =FastAPI(
   
