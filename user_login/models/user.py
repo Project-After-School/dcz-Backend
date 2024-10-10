@@ -1,9 +1,9 @@
 from sqlalchemy import Column, String, Integer, Date, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 import uuid
 import enum
-
 Base = declarative_base()
 
 class Role(enum.Enum):
@@ -24,3 +24,4 @@ class User(Base):
     device_token = Column(String, nullable=True)
     profile = Column(String, nullable=True)
     role = Column(Enum(Role), nullable=False)
+
