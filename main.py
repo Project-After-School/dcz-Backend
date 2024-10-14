@@ -17,8 +17,8 @@ app.add_middleware(
 
 app.include_router(user_router.router, tags=["유저"]) # 유저
 app.include_router(notification_router.router, tags=["공지"]) # 공지
-app.include_router(admin_router.router, tags=['어드민 회원가입']) # 어드민 회원가입
 app.include_router(comments_router.router, tags=['공지사항 댓글'])
+app.include_router(admin_router.router, tags=['어드민 회원가입']) # 어드민 회원가입
 
 if __name__ == "__main__":
   import uvicorn
