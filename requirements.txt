@@ -19,3 +19,4 @@ httpx
 jwt
 PyJWT
 >>>>>>> Stashed changes
+email_validator
