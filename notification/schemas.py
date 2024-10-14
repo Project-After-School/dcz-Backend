@@ -19,5 +19,13 @@ class Notification(NotificationBase):
   class Config:
     from_attributes = True
     
+class NotificationSimple(BaseModel):
+     title : str
+     date: datetime
+     
+     class Config:
+       from_attributes = True
+       
+       
 class NotificationUpdate(NotificationBase):
     pass
