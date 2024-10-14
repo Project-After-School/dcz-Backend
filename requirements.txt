@@ -6,17 +6,12 @@ passlib[bcrypt]
 alembic
 bcrypt == 4.0.1
 psycopg2-binary
-<<<<<<< Updated upstream
 httpx
 jwt
 PyJWT
 python-dotenv
 python-multipart
-=======
 postgresql
 python-dotenv
 httpx
-jwt
-PyJWT
->>>>>>> Stashed changes
 email_validator
