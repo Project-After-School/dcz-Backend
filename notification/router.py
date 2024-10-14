@@ -57,6 +57,7 @@ def get_notification_all(
     for notification in notifications:
         notifications_with_author.append({
             "title": notification.title,
+            "id"  : notification.id,
             "date": notification.date
         })
 
