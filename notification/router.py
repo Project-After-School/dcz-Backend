@@ -44,7 +44,7 @@ def update_notification(
     }
 
 
-@router.get("/get_notification_all", response_model=list[schemas.Notification])
+@router.get("/get_notification_all", response_model=list[schemas.NotificationSimple])
 def get_notification_all(
     skip: int = 0,
     limit: int = 10,
@@ -53,22 +53,16 @@ def get_notification_all(
 ):
     notifications = db.query(models.Notification).offset(skip).limit(limit).all()
     
-   
     notifications_with_author = []
     for notification in notifications:
-
-        author = db.query(models.User).filter(models.User.id == notification.author_id).first()
-        author_name = author.name
-        
         notifications_with_author.append({
-            **notification.__dict__,
-            "author_name": author_name,
-            "date" : notification.date
+            "title": notification.title,
+            "date": notification.date
         })
 
     return notifications_with_author
 
-@router.get("/get_notification", response_model=schemas.Notification)
+@router.get("/get_notification_detail", response_model=schemas.Notification)
 def get_notification(
     notification_title: str,
     db: Session = Depends(get_db),
