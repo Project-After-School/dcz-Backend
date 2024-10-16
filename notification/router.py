@@ -29,9 +29,14 @@ def update_notification(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)  
 ):
+    
     db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
     if db_notification is None:
         raise HTTPException(status_code=404, detail="존재하지 않는 공지사항 입니다.")
+    
+    if db_notification.author_id != current_user.id:
+        raise HTTPException(status_code=403, detail="수정할 권한이 없습니다.")
+    
     
     db_notification.title = notification_update.title
     db_notification.content = notification_update.content
