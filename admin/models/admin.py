@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, VARCHAR, Enum, UUID, String, Date
 from sqlalchemy.orm import relationship
-from admin_signin.database import Base
+from ..database.admin import Base
 # from user_login.models.user import Role
 import enum
 import uuid

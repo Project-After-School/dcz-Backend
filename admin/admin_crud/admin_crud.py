@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
-from admin_signin.admin_schema import NewAdminForm
-from admin_signin.models import Teacher
+from admin.models.admin import Teacher
+from admin.schemas.admin import NewAdminForm
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
-def get_admin(email: str, db: Session):
-  return db.query(Teacher).filter(Teacher.email == email).first()
+def get_admin(teacher_id: str, db: Session):
+  return db.query(Teacher).filter(Teacher.teacher_id == teacher_id).first()
 
 def create_admin(new_admin: NewAdminForm, db: Session):
   admin = Teacher(
@@ -18,3 +18,6 @@ def create_admin(new_admin: NewAdminForm, db: Session):
   )
   db.add(admin)
   db.commit()
+
+def verify_password(plain_password, hashed_password):
+  return pwd_context.verify(plain_password, hashed_password)
