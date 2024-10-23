@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, field_validator, ValidationError, constr
+from admin.models.admin import SchoolClass
 from fastapi import HTTPException
 
 class Token(BaseModel):
@@ -11,6 +12,7 @@ class NewAdminForm(BaseModel):
   name: constr(min_length=2, max_length=4)
   major: str = None
   password: constr(min_length=8)
+  teacher_class: SchoolClass
 
   @field_validator('teacher_id', 'name', 'password')
   @classmethod

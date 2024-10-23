@@ -14,7 +14,8 @@ def create_admin(new_admin: NewAdminForm, db: Session):
     teacher_name = new_admin.name,
     email = new_admin.email,
     hashed_pw = pwd_context.hash(new_admin.password),
-    major = new_admin.major
+    major = new_admin.major,
+    teacher_class = new_admin.teacher_class
   )
   db.add(admin)
   db.commit()
