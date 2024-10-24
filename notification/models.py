@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
 import uuid
+from sqlalchemy.dialects.postgresql import ARRAY
+
 
 Base = declarative_base()
 
@@ -38,9 +40,12 @@ class Notification(Base):
     content = Column(String)
     date = Column(DateTime, nullable=False, default=datetime.now)
     author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))
+    grade = Column(String, nullable=False)  
+    class_num = Column(String, nullable=False)  
 
     author = relationship("User", back_populates="notifications")
     comments = relationship("NotificationComments", back_populates="notification")
+
 
 class NotificationComments(Base):
     __tablename__ = "notification_comments"
