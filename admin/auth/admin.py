@@ -13,7 +13,7 @@ import jwt
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+ALGORITHM = os.getenv("ALGORITHM" , "HS256")
 ACCESS_TOKEN_EXPIRES_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRES_MINUTES")
 
 token_url = OAuth2PasswordBearer(tokenUrl="/admin/login")

@@ -18,7 +18,7 @@ class NotificationCreate(NotificationBase):
 
 class Notification(NotificationBase):
     id: int
-    author_id: UUID
+    author_id: str
     author_name: str
     date: datetime
   
