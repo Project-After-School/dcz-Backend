@@ -5,7 +5,6 @@ from notification_comments import router as comments_router
 from fastapi.middleware.cors import CORSMiddleware
 from admin.router import admin_router
 from user_mypage import router as user_mypage_router
-from admin.database.admin import init_teacher_db
 from auth import auth as auth_router
 
 app = FastAPI()
