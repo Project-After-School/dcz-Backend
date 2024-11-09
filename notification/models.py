@@ -1,10 +1,12 @@
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Enum as SQLAEnum, Date
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Enum as SQLAEnum, Date, VARCHAR,Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
 import uuid
+from sqlalchemy.dialects.postgresql import ARRAY
+
 
 Base = declarative_base()
 
@@ -29,6 +31,16 @@ class User(Base):
 
     notifications = relationship("Notification", back_populates="author")
     notification_comments = relationship("NotificationComments", back_populates="author")
+    
+class Teacher(Base):
+  __tablename__ = "teacher_info"
+
+  teacher_id = Column(VARCHAR(100), primary_key=True, nullable=False)
+  teacher_name = Column(VARCHAR(5), nullable=False)
+  email = Column(VARCHAR(100), nullable=False, unique=True)
+  major = Column(VARCHAR(100), nullable=True)
+  hashed_pw = Column(VARCHAR(100), nullable=False)
+  role = Column(Enum(Role), default=Role.ADMIN)
 
 class Notification(Base):
     __tablename__ = "notification"
@@ -38,9 +50,12 @@ class Notification(Base):
     content = Column(String)
     date = Column(DateTime, nullable=False, default=datetime.now)
     author_id = Column(UUID(as_uuid=True), ForeignKey("user_info.id"))
+    grade = Column(String, nullable=False)  
+    class_num = Column(String, nullable=False)  
 
     author = relationship("User", back_populates="notifications")
     comments = relationship("NotificationComments", back_populates="notification")
+
 
 class NotificationComments(Base):
     __tablename__ = "notification_comments"

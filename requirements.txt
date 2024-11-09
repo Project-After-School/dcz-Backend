@@ -15,3 +15,5 @@ postgresql
 python-dotenv
 httpx
 email_validator
+pydantic_settings
+jose

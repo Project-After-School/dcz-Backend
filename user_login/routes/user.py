@@ -64,3 +64,10 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     except Exception as e:
         print(f"Unexpected error: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+    
+    
+
+
+@router.post("/user/logout")
+def logout():
+    return {"detail": "로그아웃 성공"}
