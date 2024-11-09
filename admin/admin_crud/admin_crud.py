@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from admin.models.admin import Teacher
 from admin.schemas.admin import NewAdminForm
 from passlib.context import CryptContext
+import uuid
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -10,6 +11,7 @@ def get_admin(teacher_id: str, db: Session):
 
 def create_admin(new_admin: NewAdminForm, db: Session):
   admin = Teacher(
+    dcz_id = uuid.uuid4(),
     teacher_id = new_admin.teacher_id,
     teacher_name = new_admin.name,
     email = new_admin.email,

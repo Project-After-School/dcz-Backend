@@ -37,3 +37,6 @@ def get_db():
     raise e
   finally:
     db.close()
+
+def init_teacher_db():
+  Base.metadata.create_all(engine)

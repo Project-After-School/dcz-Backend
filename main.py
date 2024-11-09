@@ -5,6 +5,7 @@ from notification_comments import router as comments_router
 from fastapi.middleware.cors import CORSMiddleware
 from admin.router import admin_router
 from user_mypage import router as user_mypage_router
+from admin.database.admin import init_teacher_db
 
 app = FastAPI()
 
@@ -23,5 +24,6 @@ app.include_router(comments_router.router, tags=['공지사항 댓글'])
 app.include_router(user_mypage_router.router, tags=['유저 마이페이지'])
 
 if __name__ == "__main__":
+  init_teacher_db()
   import uvicorn
   uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
