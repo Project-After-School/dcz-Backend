@@ -10,5 +10,5 @@ class NewHomework(BaseModel):
   submit_detail: str
   start_date: datetime
   end_date: datetime
-  # teacher_file_url: str = None
+  teacher_file_url: str = None
   selected_grade: str

@@ -23,7 +23,7 @@ router = APIRouter(
 )
 
 @router.post('/signup')
-async def signup(new_teacher: Annotated[Json[admin.NewAdminForm], Form()], db: Session = Depends(get_db)):
+async def signup(new_teacher: admin.NewAdminForm, db: Session = Depends(get_db)):
   try:
     teacher = admin_crud.get_admin(new_teacher.email, db)
 
