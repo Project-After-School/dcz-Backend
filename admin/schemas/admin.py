@@ -11,7 +11,7 @@ class NewAdminForm(BaseModel):
   name: constr(min_length=2, max_length=4)
   major: str = None
   password: constr(min_length=8)
-  teacher_class: str # "1-1 과 같이 입력"
+  teacher_class: str # "1-1 과 같이 입력pyd"
 
   @field_validator('teacher_id', 'name', 'password')
   @classmethod

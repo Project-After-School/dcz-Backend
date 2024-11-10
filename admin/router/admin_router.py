@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from admin.database.admin import get_db
@@ -7,6 +7,8 @@ from admin.exceptions import UserNotFoundException, PasswordNotMatch
 from datetime import timedelta, timezone
 from dotenv import load_dotenv
 from admin.auth.admin import create_access_token
+from pydantic import Json
+from typing import Annotated
 import admin.schemas.admin as admin
 import admin.admin_crud.admin_crud as admin_crud
 import os
@@ -21,7 +23,7 @@ router = APIRouter(
 )
 
 @router.post('/signup')
-async def signup(new_teacher: admin.NewAdminForm, db: Session = Depends(get_db)):
+async def signup(new_teacher: Annotated[Json[admin.NewAdminForm], Form()], db: Session = Depends(get_db)):
   try:
     teacher = admin_crud.get_admin(new_teacher.email, db)
 

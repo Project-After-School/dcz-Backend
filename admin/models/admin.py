@@ -21,4 +21,4 @@ class Teacher(Base):
   major = Column(VARCHAR(100), nullable=True)
   hashed_pw = Column(VARCHAR(100), nullable=False)
   role = Column(Enum(Role), default=Role.ADMIN)
-  teacher_class = Column(VARCHAR(200), nullable=False)
+  teacher_class = Column(VARCHAR(200), nullable=True) # 선생님의 담당 학년반 "1-1"과 같이 전송
