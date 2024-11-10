@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile, HTTPException, status, File
+from fastapi import APIRouter, Depends, UploadFile, HTTPException, status, File, Form
 # from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from homework.database.homework import get_db
@@ -15,11 +15,9 @@ router = APIRouter(
 # async def get_hws(request: , db: Session = Depends(get_db)):
 
 @router.post("/upload_hw")
-def upload_hw(newhomework: homework_schemas.NewHomework, db: Session = Depends(get_db), files: Optional[List[UploadFile]] = File([])):
+def upload_hw(newhomework: homework_schemas.NewHomeworkㄷ, db: Session = Depends(get_db), files: Optional[List[UploadFile]] = File([])):
   try:
     print(files)
-    if newhomework is None:
-      raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Homework detail not found")
     homework_crud.createHomework(newhomework, db, files)
     return HTTPException(status_code=status.HTTP_200_OK, detail="Homework uploaded successfully")
   except Exception as e:
