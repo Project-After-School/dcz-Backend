@@ -8,7 +8,6 @@ from datetime import timedelta, timezone
 from dotenv import load_dotenv
 from admin.auth.admin import create_access_token
 from pydantic import Json
-from typing import Annotated
 import admin.schemas.admin as admin
 import admin.admin_crud.admin_crud as admin_crud
 import os
