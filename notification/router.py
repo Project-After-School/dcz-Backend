@@ -16,20 +16,18 @@ from admin.models import admin as Admin
 router = APIRouter()
 
 
-
 @router.post("/admin/post_notification", response_model=schemas.Notification)
 def create_notification(
     notification: schemas.NotificationCreate,
     db: Session = Depends(get_db),
     current_teacher: models.Teacher = Depends(get_current_teacher)
 ):
-    # 리스트를 그대로 사용
     db_notification = models.Notification(
         title=notification.title,
         content=notification.content,
         grade=", ".join(notification.grade),  # 리스트를 문자열로 변환하여 저장
         class_num=", ".join(notification.class_num),  # 리스트를 문자열로 변환하여 저장
-        author_id=current_teacher.teacher_id
+        author_id=current_teacher.id  # current_teacher의 id 사용
     )
 
     db.add(db_notification)
@@ -40,7 +38,8 @@ def create_notification(
         **db_notification.__dict__,
         "author_name": current_teacher.teacher_name,
         "grade": db_notification.grade.split(', '),  
-        "class_num": db_notification.class_num.split(', ')  }
+        "class_num": db_notification.class_num.split(', ')  
+    }
 
 
 
@@ -49,7 +48,7 @@ def update_notification(
     notification_id: int,
     notification_update: schemas.NotificationUpdate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)  
+    current_user: models.Teacher = Depends(get_current_user)  
 ):
     
     db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
