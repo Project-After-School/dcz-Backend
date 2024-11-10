@@ -15,7 +15,7 @@ router = APIRouter(
 # async def get_hws(request: , db: Session = Depends(get_db)):
 
 @router.post("/upload_hw")
-def upload_hw(newhomework: homework_schemas.NewHomeworkㄷ, db: Session = Depends(get_db), files: Optional[List[UploadFile]] = File([])):
+def upload_hw(newhomework: homework_schemas.NewHomework, db: Session = Depends(get_db), files: Optional[List[UploadFile]] = File([])):
   try:
     print(files)
     homework_crud.createHomework(newhomework, db, files)
