@@ -15,7 +15,7 @@ class Teacher(Base):
   __tablename__ = "teacher_info"
 
   id = Column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4, primary_key=True)
-  teacher_id = Column(VARCHAR(100), nullable=False)
+  teacher_id = Column(VARCHAR(100), nullable=False, unique=True)
   teacher_name = Column(VARCHAR(5), nullable=False)
   email = Column(VARCHAR(100), nullable=False, unique=True)
   major = Column(VARCHAR(100), nullable=True)
