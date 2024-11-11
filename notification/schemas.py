@@ -29,6 +29,7 @@ class NotificationSimple(BaseModel):
     title: str
     date: datetime
     id: int
+    major : str
      
     class Config:
         from_attributes = True
