@@ -11,9 +11,8 @@ jwt
 PyJWT
 python-dotenv
 python-multipart
-postgresql
 python-dotenv
 httpx
 email_validator
 pydantic_settings
-jose
+python-jose
