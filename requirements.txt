@@ -16,3 +16,5 @@ httpx
 email_validator
 pydantic_settings
 python-jose
+botocore
+boto3
