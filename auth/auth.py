@@ -7,14 +7,11 @@ from admin.models.admin import Teacher
 from user_login.database import get_db
 import os
 
-# JWT 설정
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
-# FastAPI router
 router = APIRouter()
 
-# HTTPBearer 인증 스킴
 bearer_scheme = HTTPBearer()
 
 def decode_token(token: str):
@@ -35,12 +32,10 @@ async def get_current_user(
     db: Session = Depends(get_db)
 ):
     token = credentials.credentials
-    print("Received token:", token)  # 디버깅용 출력
     
-    # 토큰 디코딩
     payload = decode_token(token)
     
-    account_id = payload.get("sub")  # sub 필드에서 account_id 가져오기
+    account_id = payload.get("sub")  
     
     if account_id is None:
         raise HTTPException(
@@ -49,7 +44,6 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # 데이터베이스에서 account_id로 유저 조회
     user = db.query(User).filter(User.account_id == account_id).first()
     
     if user is None:
@@ -65,12 +59,11 @@ async def get_current_teacher(
     db: Session = Depends(get_db)
 ):
     token = credentials.credentials
-    print("Received token:", token)  # 디버깅용 출력
     
-    # 토큰 디코딩
+    
     payload = decode_token(token)
     
-    teacher_id = payload.get("sub")  # sub 필드에서 teacher_id 가져오기
+    teacher_id = payload.get("sub")  
     
     if teacher_id is None:
         raise HTTPException(
@@ -79,7 +72,6 @@ async def get_current_teacher(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # 데이터베이스에서 teacher_id로 교사 조회
     teacher = db.query(Teacher).filter(Teacher.teacher_id == teacher_id).first()
     
     if teacher is None:
@@ -90,12 +82,10 @@ async def get_current_teacher(
     
     return teacher
 
-# 예시: 인증된 사용자 정보 조회 (학생용)
 @router.get("/user/profile")
 async def get_user_profile(current_user: User = Depends(get_current_user)):
     return {"account_id": current_user.account_id, "role": current_user.role}
 
-# 예시: 인증된 교사 정보 조회
 @router.get("/admin/profile")
 async def get_teacher_profile(current_teacher: Teacher = Depends(get_current_teacher)):
     return {"teacher_id": current_teacher.teacher_id, "role": current_teacher.role}
