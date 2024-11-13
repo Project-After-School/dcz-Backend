@@ -82,39 +82,10 @@ def update_notification(
 
 @router.get("/get_notification_all_admin", response_model=list[schemas.NotificationSimple])
 def get_notification_all_admin(
-    skip: int = 0,
-    limit: int = 10,
     db: Session = Depends(get_db),
     current_teacher: models.Teacher = Depends(get_current_teacher)
 ):
-    notifications = db.query(models.Notification).filter(models.Notification.author_id == current_teacher.id).offset(skip).limit(limit).all()
-
-    notifications_with_author = []
-    for notification in notifications:
-        author = db.query(models.Teacher).filter(models.Teacher.id == notification.author_id).first()
-        notifications_with_author.append({
-            "title": notification.title,
-            "id": notification.id,
-            "date": notification.date,
-            "grade": notification.grade,
-            "class_num": notification.class_num,
-            "major": author.major if author else None  
-        })
-
-    return 
-
-
-@router.get("/get_notification_all_user", response_model=list[schemas.NotificationSimple])
-def get_notification_all_user(
-    skip: int = 0,
-    limit: int = 10,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    notifications = db.query(models.Notification).filter(
-        models.Notification.grade.like(f"%{current_user.grade}%"),
-        models.Notification.class_num.like(f"%{current_user.class_num}%")
-    ).offset(skip).limit(limit).all()
+    notifications = db.query(models.Notification).filter(models.Notification.author_id == current_teacher.id).all()
 
     notifications_with_author = []
     for notification in notifications:
@@ -130,27 +101,63 @@ def get_notification_all_user(
 
     return notifications_with_author
 
+
+@router.get("/get_notification_all_user", response_model=list[schemas.NotificationSimple])
+def get_notification_all_user(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    notifications = db.query(models.Notification).filter(
+        models.Notification.grade.like(f"%{current_user.grade}%"),
+        models.Notification.class_num.like(f"%{current_user.class_num}%")
+    ).all()
+
+    notifications_with_author = []
+    for notification in notifications:
+        author = db.query(models.Teacher).filter(models.Teacher.id == notification.author_id).first()
+        notifications_with_author.append({
+            "title": notification.title,
+            "id": notification.id,
+            "date": notification.date,
+            "grade": notification.grade,
+            "class_num": notification.class_num,
+            "major": author.major if author else None  
+        })
+
+    return notifications_with_author
+
+
 @router.get("/get_notification_detail", response_model=schemas.Notification)
 def get_notification(
     notification_id: int,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)  
 ):
     db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
     if db_notification is None:
         raise HTTPException(status_code=404, detail="존재하지 않는 공지사항 입니다.")
+
+    author_name = None
+    author_id = db_notification.author_id
     
-    # author = db.query(models.User).filter(models.User.id == db_notification.author_id).first()
-    # if author is None:
-    #   raise HTTPException(status_code=404, detail="유저가 없습니다.")
+    user_author = db.query(models.User).filter(models.User.id == author_id).first()
+    if user_author:
+        author_name = user_author.name
+    else:
+        teacher_author = db.query(models.Teacher).filter(models.Teacher.id == author_id).first()
+        if teacher_author:
+            author_name = teacher_author.teacher_name
+    
+    if not author_name:
+        raise HTTPException(status_code=404, detail="작성자를 찾을 수 없습니다.")
+
     return {
         **db_notification.__dict__,
-        "author_name": current_user.name,
+        "author_name": author_name,
         "date": db_notification.date,
-        "grade" : db_notification.grade.split(', '),
+        "grade": db_notification.grade.split(', '),
         "class_num": db_notification.class_num.split(', ')
     }
-        
+
         
     
     
@@ -162,14 +169,16 @@ def get_notification(
 def delete_notification(
     notification_id: int,
     db: Session = Depends(get_db),
-    current_teacher: models.Teacher = Depends(get_current_teacher)  
+    current_teacher: models.Teacher = Depends(get_current_teacher)
 ):
     db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
     if db_notification is None:
         raise HTTPException(status_code=404, detail="존재하지 않는 공지사항 입니다.")
     
     if db_notification.author_id != current_teacher.id:
-        raise HTTPException(status_code=403, detail="수정할 권한이 없습니다.")
+        raise HTTPException(status_code=403, detail="삭제할 권한이 없습니다.")
+    
+    db.query(models.NotificationComments).filter(models.NotificationComments.notification_id == notification_id).delete()
     
     db.delete(db_notification)
     db.commit()
@@ -177,11 +186,9 @@ def delete_notification(
     return {
         **db_notification.__dict__,
         "author_name": current_teacher.teacher_name,
-        "grade" : db_notification.grade.split(', '),
-        "class_num" : db_notification.class_num.split(', ')
+        "grade": db_notification.grade.split(', '),
+        "class_num": db_notification.class_num.split(', ')
     }
-
-
 
 
 
