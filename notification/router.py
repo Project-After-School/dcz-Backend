@@ -25,9 +25,9 @@ def create_notification(
     db_notification = models.Notification(
         title=notification.title,
         content=notification.content,
-        grade=", ".join(notification.grade),  # 리스트를 문자열로 변환하여 저장
-        class_num=", ".join(notification.class_num),  # 리스트를 문자열로 변환하여 저장
-        author_id=current_teacher.id  # current_teacher의 id 사용
+        grade=", ".join(notification.grade),  
+        class_num=", ".join(notification.class_num),  
+        author_id=current_teacher.id  
     )
 
     db.add(db_notification)
@@ -91,7 +91,6 @@ def get_notification_all_admin(
 
     notifications_with_author = []
     for notification in notifications:
-        # 작성자 정보를 조회하여 major 추가
         author = db.query(models.Teacher).filter(models.Teacher.id == notification.author_id).first()
         notifications_with_author.append({
             "title": notification.title,
@@ -99,10 +98,10 @@ def get_notification_all_admin(
             "date": notification.date,
             "grade": notification.grade,
             "class_num": notification.class_num,
-            "major": author.major if author else None  # 작성자의 major 추가
+            "major": author.major if author else None  
         })
 
-    return notifications_with_author
+    return 
 
 
 @router.get("/get_notification_all_user", response_model=list[schemas.NotificationSimple])
@@ -119,7 +118,6 @@ def get_notification_all_user(
 
     notifications_with_author = []
     for notification in notifications:
-        # 작성자 정보를 조회하여 major 추가
         author = db.query(models.Teacher).filter(models.Teacher.id == notification.author_id).first()
         notifications_with_author.append({
             "title": notification.title,
@@ -127,7 +125,7 @@ def get_notification_all_user(
             "date": notification.date,
             "grade": notification.grade,
             "class_num": notification.class_num,
-            "major": author.major if author else None  # 작성자의 major 추가
+            "major": author.major if author else None  
         })
 
     return notifications_with_author

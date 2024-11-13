@@ -53,7 +53,7 @@ class Notification(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     content = Column(String)
-    date = Column(DateTime, nullable=False, default=datetime.now)
+    date = Column(DateTime, nullable=False, default=datetime.now())
     author_id = Column(UUID(as_uuid=True), ForeignKey("teacher_info.id"))
     grade = Column(String, nullable=False)  
     class_num = Column(String, nullable=False)  
@@ -67,7 +67,7 @@ class NotificationComments(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     content = Column(String, nullable=False)
-    date = Column(DateTime, nullable=False, default=datetime.now)
+    date = Column(DateTime, nullable=False, default=datetime.now())
 
     author_id = Column(UUID(as_uuid=True), ForeignKey("teacher_info.id"))
     notification_id = Column(Integer, ForeignKey("notification.id"))
