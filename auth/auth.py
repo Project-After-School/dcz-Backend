@@ -17,10 +17,8 @@ bearer_scheme = HTTPBearer()
 def decode_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print("Decoded payload:", payload)  # 디버깅용 출력
         return payload
     except JWTError as e:
-        print(f"Token decoding error: {e}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
