@@ -36,8 +36,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.DCZ_TOKEN }}
         
-      - name: Copy .env for Build
-        run: cp .env ./
+      - name: Create .env file from Secrets
+        run: echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Build and Push Docker Image
         id: docker_build
