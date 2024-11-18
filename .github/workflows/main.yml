@@ -3,7 +3,7 @@ name: Build and Deploy with Docker
 on:
   push:
     branches:
-      - main  # develop 브랜치에 푸시될 때마다 트리거
+      - main  # main 브랜치에 푸시될 때 트리거
 
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dcz-backend  # ghcr.io/{github_username}/이미지이름
@@ -40,6 +40,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v4  # Docker Build and Push 최신 버전 사용
         with:
+          context: .  # 현재 디렉토리
           push: true  # 이미지를 GHCR에 푸시
           tags: ${{ env.DOCKER_IMAGE }}:latest  # 이미지 태그 설정
 
@@ -58,4 +59,5 @@ jobs:
       - name: Docker Run
         run: |
           docker stop ${{ env.NAME }} || true && docker rm ${{ env.NAME }} || true && docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
+          docker pull ${{ env.DOCKER_IMAGE }}:latest  # 이미지를 다시 가져오기
           docker run -d -p 80:80 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
