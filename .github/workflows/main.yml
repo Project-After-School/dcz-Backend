@@ -3,12 +3,12 @@ name: Build and Deploy with Docker
 on:
   push:
     branches:
-      - main  # main 브랜치에 푸시될 때 트리거
+      - main  
 
 env:
-  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dcz-backend  # ghcr.io/{github_username}/이미지이름
-  VERSION: ${{ github.sha }}  # 커밋 SHA를 버전으로 사용
-  NAME: dcz-backend  # Docker 컨테이너 이름
+  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dcz-backend  
+  VERSION: ${{ github.sha }}  
+  NAME: dcz-backend  
 
 jobs:
   build:
@@ -16,13 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3  # GitHub 리포지토리 클론
+        uses: actions/checkout@v3 
       
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2  # Docker Buildx 최신 버전 사용
+        uses: docker/setup-buildx-action@v2 
         
       - name: Cache Docker Layers
-        uses: actions/cache@v3  # Cache 최신 버전 사용
+        uses: actions/cache@v3  
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ env.VERSION }}
@@ -30,27 +30,27 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Login to GHCR
-        uses: docker/login-action@v2  # GHCR 로그인 최신 버전 사용
+        uses: docker/login-action@v2  
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}  # GitHub 사용자 이름
-          password: ${{ secrets.DCZ_TOKEN }}  # GitHub Secrets에 저장된 GHCR 토큰
+          username: ${{ github.actor }} 
+          password: ${{ secrets.DCZ_TOKEN }}  
         
       - name: Build and Push Docker Image
         id: docker_build
-        uses: docker/build-push-action@v4  # Docker Build and Push 최신 버전 사용
+        uses: docker/build-push-action@v4  
         with:
-          context: .  # 현재 디렉토리
-          push: true  # 이미지를 GHCR에 푸시
-          tags: ${{ env.DOCKER_IMAGE }}:latest  # 이미지 태그 설정
+          context: .  
+          push: true  
+          tags: ${{ env.DOCKER_IMAGE }}:latest  
 
   deploy:
     needs: build
     name: Deploy
-    runs-on: [ self-hosted, label-dcz ]  # AWS EC2 Runner의 라벨
+    runs-on: [ self-hosted, label-dcz ] 
     steps:
       - name: Login to GHCR
-        uses: docker/login-action@v2  # GHCR 로그인 최신 버전 사용
+        uses: docker/login-action@v2  
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -59,5 +59,5 @@ jobs:
       - name: Docker Run
         run: |
           docker stop ${{ env.NAME }} || true && docker rm ${{ env.NAME }} || true && docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
-          docker pull ${{ env.DOCKER_IMAGE }}:latest  # 이미지를 다시 가져오기
-          docker run -d -p 80:80 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker pull ${{ env.DOCKER_IMAGE }}:latest  
+          docker run -d -p 80:80 --name ${{ env.NAME }} --restart always --env-file .env ${{ env.DOCKER_IMAGE }}:latest
