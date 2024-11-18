@@ -8,7 +8,7 @@ from user_mypage import router as user_mypage_router
 from admin.database.admin import init_teacher_db
 from auth import auth as auth_router
 from homework.routes import homework as homework_router
-
+#ㅇ
 app = FastAPI()
 
 app.add_middleware(
