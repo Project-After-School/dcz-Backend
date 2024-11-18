@@ -7,8 +7,6 @@ RUN pip install --no-cache-dir -r /dcz/requirements.txt
 
 RUN pip install python-dotenv
 
-COPY .env /dcz/.env
-
 COPY . /dcz/
 
 
