@@ -3,7 +3,7 @@ name: Build and Deploy with Docker
 on:
   push:
     branches:
-      - main  # main 브랜치에 푸시될 때마다 트리거
+      - develop  # main 브랜치에 푸시될 때마다 트리거
 
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dcz-backend  # ghcr.io/{github_username}/이미지이름
@@ -22,7 +22,7 @@ jobs:
         uses: docker/setup-buildx-action@v1  # Docker Buildx 설정
         
       - name: Cache Docker Layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ env.VERSION }}
