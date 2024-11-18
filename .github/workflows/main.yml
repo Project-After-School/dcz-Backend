@@ -17,16 +17,16 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        
-      - name: Create .env file
+
+      - name: Set up environment variables
         run: |
-          echo "DATABASE_URL=postgresql://yabbi:12341234@43.203.215.239:5432/dcz" > .env
-          echo "SECRET_KEY=dkssudgktpdywjsmsrlarkdmsdlqslqslekwjsmseoejrthvmxnpd" >> .env
-          echo "ACCESS_TOKEN_EXPIRES_MINUTES=1440" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "ACCESS_TOKEN_EXPIRES_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRES_MINUTES }}" >> .env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        
+
       - name: Cache Docker Layers
         uses: actions/cache@v3
         with:
@@ -41,7 +41,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.DCZ_TOKEN }}
-        
+
       - name: Build and Push Docker Image
         id: docker_build
         uses: docker/build-push-action@v4
@@ -61,9 +61,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.DCZ_TOKEN }}
-      
+
       - name: Docker Run
         run: |
-          docker stop ${{ env.NAME }} || true && docker rm ${{ env.NAME }} || true && docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
+          docker stop ${{ env.NAME }} || true
+          docker rm ${{ env.NAME }} || true
+          docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
           docker pull ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 80:80 --name ${{ env.NAME }} --restart always --env-file .env ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 80:80 \
+            --name ${{ env.NAME }} \
+            --restart always \
+            --env-file .env \
+            ${{ env.DOCKER_IMAGE }}:latest
