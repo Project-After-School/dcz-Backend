@@ -3,7 +3,7 @@ name: Build and Deploy with Docker
 on:
   push:
     branches:
-      - develop  # main 브랜치에 푸시될 때마다 트리거
+      - main  # main 브랜치에 푸시될 때마다 트리거
 
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dcz-backend  # ghcr.io/{github_username}/이미지이름
