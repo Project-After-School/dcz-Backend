@@ -7,7 +7,7 @@ from typing import Optional
 import os
 
 load_dotenv()
-SERVER_URL = os.getenv("URL")
+DATABASE_URL = os.getenv("URL")
 DB_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DB_URL)
@@ -19,7 +19,7 @@ class Settings(BaseSettings):
   SECRET_KEY: Optional[str] = None
   DATABASE_URL: Optional[str] = None
   COOKIE_NAME: str = "teacher_cookie"
-  COOKIE_DOMAIN: str = SERVER_URL
+  COOKIE_DOMAIN: str = DATABASE_URL
   COOKIE_PATH: str = "/"
   COOKIE_SECURE: bool = False # HTTPS로 사용한다면 True
   COOKIE_HTTPONLY: bool = True
