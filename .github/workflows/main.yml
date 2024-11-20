@@ -69,7 +69,6 @@ jobs:
           docker run -d -p 8000:8000 \
             --name ${{ env.NAME }} \
             --restart always \
-            --env-file .env \
             --log-opt max-size=10m \
             --log-opt max-file=3 \
             ${{ env.DOCKER_IMAGE }}:latest
