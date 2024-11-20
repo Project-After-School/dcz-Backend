@@ -73,7 +73,7 @@ jobs:
           docker rm ${{ env.NAME }} || true
           docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
           docker pull ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 80:80 \
+          docker run -d -p 8000:8000 \
             --name ${{ env.NAME }} \
             --restart always \
             --env-file .env \
