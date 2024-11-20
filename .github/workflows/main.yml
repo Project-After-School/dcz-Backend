@@ -9,7 +9,7 @@ env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/dcz-backend
   VERSION: ${{ github.sha }}
   NAME: dcz-backend
-
+#
 jobs:
   build:
     name: Build Docker Image
