@@ -10,8 +10,6 @@ import os
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
-router = APIRouter()
-
 bearer_scheme = HTTPBearer()
 
 def decode_token(token: str):
@@ -79,11 +77,3 @@ async def get_current_teacher(
         )
     
     return teacher
-
-@router.get("/user/profile")
-async def get_user_profile(current_user: User = Depends(get_current_user)):
-    return {"account_id": current_user.account_id, "role": current_user.role}
-
-@router.get("/admin/profile")
-async def get_teacher_profile(current_teacher: Teacher = Depends(get_current_teacher)):
-    return {"teacher_id": current_teacher.teacher_id, "role": current_teacher.role}
