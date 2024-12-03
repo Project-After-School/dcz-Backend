@@ -192,31 +192,13 @@ def delete_notification(
 
 
 
-
-
-@router.delete("/admin/delete_notification_all", response_model=list[schemas.Notification])
-def delete_notification_all(
+@router.delete("/admin/delete_all_notifications", response_model=dict)
+def delete_all_notifications(
     db: Session = Depends(get_db),
-    current_teacher: models.Teacher = Depends(get_current_teacher)  
+    current_teacher: models.Teacher = Depends(get_current_teacher)
 ):
-    
-    db_notifications = db.query(models.Notification).all()
-    
-    if not db_notifications:
-        raise HTTPException(status_code=404, detail="삭제할 공지사항이 없습니다.")
-    
-
-    deleted_notifications = [] 
-    for notification in db_notifications:
-        deleted_notifications.append({
-            "id": notification.id,
-            "title": notification.title,
-            "content": notification.content,
-            "author_id": notification.author_id,
-            "date": notification.date, 
-        })
-        db.delete(notification)
-    
+    notifications_deleted = db.query(models.Notification).delete()
+    db.query(models.NotificationComments).delete()
     db.commit()
 
-    return deleted_notifications  
+    return {"message": f"{notifications_deleted}개의 공지사항이 삭제되었습니다."}
