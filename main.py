@@ -6,7 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from admin.router import admin_router
 from user_mypage import router as user_mypage_router
 from admin.database.admin import init_teacher_db
-from auth import auth as auth_router
 from homework.routes import homework as homework_router
 
 app = FastAPI()
@@ -27,6 +26,6 @@ app.include_router(user_mypage_router.router, tags=['유저 마이페이지'])
 app.include_router(homework_router.router, tags=['과제'])
 
 # if __name__ == "__main__":
-#   init_teacher_db()
-#   import uvicorn
-#   uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
+#    init_teacher_db()
+#    import uvicorn
+#    uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
