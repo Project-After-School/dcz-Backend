@@ -21,3 +21,6 @@ def get_db():
     raise e
   finally:
     db.close()
+
+def init_homework_db():
+  Base.metadata.create_all(engine)

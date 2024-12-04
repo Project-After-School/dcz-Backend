@@ -15,7 +15,6 @@ from admin.models import admin as Admin
 
 router = APIRouter()
 
-
 @router.post("/admin/post_notification", response_model=schemas.Notification)
 def create_notification(
     notification: schemas.NotificationCreate,
@@ -41,8 +40,6 @@ def create_notification(
         "class_num": db_notification.class_num.split(', ')  
     }
 
-
-
 @router.put("/admin/update_notification", response_model=schemas.Notification)
 def update_notification(
     notification_id: int,
@@ -58,13 +55,11 @@ def update_notification(
     if db_notification.author_id != current_teacher.id:
         raise HTTPException(status_code=403, detail="수정할 권한이 없습니다.")
     
-    
     db_notification.title = notification_update.title
     db_notification.content = notification_update.content
     
     db_notification.grade = ", ".join(notification_update.grade)
     db_notification.class_num = ", ".join(notification_update.class_num) 
-
    
     db.commit()
     db.refresh(db_notification)
@@ -76,9 +71,6 @@ def update_notification(
         "class_num": db_notification.class_num.split(' ,')
         
     }
-
-    
-    
 
 @router.get("/get_notification_all_admin", response_model=list[schemas.NotificationSimple])
 def get_notification_all_admin(

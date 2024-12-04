@@ -49,8 +49,12 @@ async def login(response: Response, login_form: OAuth2PasswordRequestForm = Depe
   
   res = admin_crud.verify_password(login_form.password, user.hashed_pw)
 
+  print("------")
+  print(login_form.password)
+  print(user.hashed_pw)
+
   access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-  access_token = create_access_token(data={"sub": user.teacher_id}, expires_delta=access_token_expires)
+  access_token = create_access_token(data={"teacher_id": user.teacher_id, "teacher_uuid": str(user.id)}, expires_delta=access_token_expires)
 
   response.set_cookie(key="access_token", value=access_token, expires=access_token_expires, httponly=True)
 
