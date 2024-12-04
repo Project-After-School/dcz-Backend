@@ -5,11 +5,11 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 load_dotenv()
-DB_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 Base = declarative_base()
 
-engine = create_engine(DB_URL)
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():
