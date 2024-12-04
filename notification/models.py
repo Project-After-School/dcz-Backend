@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Enum as SQLAEnum, Date, VARCHAR,Enum
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Enum as SQLAEnum, Date, VARCHAR,Enum 
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -34,14 +34,14 @@ class User(Base):
 class Teacher(Base):
   __tablename__ = "teacher_info"
   
-  id = Column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4, primary_key=True)
-  teacher_id = Column(VARCHAR(100), nullable=False)
-  teacher_name = Column(VARCHAR(5), nullable=False)
-  email = Column(VARCHAR(100), nullable=False, unique=True)
-  major = Column(VARCHAR(100), nullable=True)
-  hashed_pw = Column(VARCHAR(100), nullable=False)
-  role = Column(Enum(Role), default=Role.ADMIN)
-  teacher_class = Column(VARCHAR(200), nullable=False)
+  id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)  # 기본 키
+  teacher_id = Column(String(100), nullable=False, unique=True)  # 유니크 제약 조건
+  teacher_name = Column(String(5), nullable=False)
+  email = Column(String(100), nullable=False, unique=True)
+  major = Column(String(100), nullable=True)
+  hashed_pw = Column(String(100), nullable=False)
+  role = Column(SQLAEnum(Role), default=Role.ADMIN)
+  teacher_class = Column(String(200))
   
   notifications = relationship("Notification", back_populates="author")
   notification_comments = relationship("NotificationComments", back_populates="author")
