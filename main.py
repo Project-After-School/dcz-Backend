@@ -23,11 +23,11 @@ app.add_middleware(
 app.include_router(user_router.router, tags=["유저"]) # 유저
 app.include_router(notification_router.router, tags=["공지"]) # 공지
 app.include_router(admin_router.router, tags=['어드민 로그인 회원가입']) # 어드민 로그인 회원가입
-app.include_router(comments_router.router, tags=['공지사항 댓글'])
+app.include_router(comments_router.router, tags=['공지사항 댓글']) #
 app.include_router(user_mypage_router.router, tags=['유저 마이페이지'])
 app.include_router(homework_router.router, tags=['과제'])
 
-# if __name__ == "__main__":
-#    init_teacher_db()
-#    import uvicorn
-#    uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
+if __name__ == "__main__":
+    init_teacher_db()
+    import uvicorn
+    uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
