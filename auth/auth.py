@@ -58,6 +58,8 @@ async def get_current_teacher(
     db: Session = Depends(get_db)
 ):
     token = credentials.credentials
+    print(SECRET_KEY)
+
     
     
     payload = decode_token(token)
