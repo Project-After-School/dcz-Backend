@@ -26,14 +26,20 @@ token_url = OAuth2PasswordBearer(tokenUrl="/admin/login")
 #     'expires': expirationtime
 #   }
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: timedelta):
   to_encode = data.copy()
   if expires_delta:
     expire = datetime.now(timezone.utc) + expires_delta
   else:
-    expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=99)
   to_encode.update({"exp": expire})
   encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+  decoded_jwt = jwt.decode(encoded_jwt, SECRET_KEY, algorithms=ALGORITHM)
+  print("-------")
+  print(decoded_jwt)
+  print(encoded_jwt)
+
   return encoded_jwt
 
 def get_admin(token: str = Depends(token_url), db: Session = Depends(get_admin)):
