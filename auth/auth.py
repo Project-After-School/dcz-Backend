@@ -5,8 +5,10 @@ from sqlalchemy.orm import Session
 from user_login.models.user import User
 from admin.models.admin import Teacher
 from user_login.database import get_db
+from dotenv import load_dotenv
 import os
-#
+
+load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
