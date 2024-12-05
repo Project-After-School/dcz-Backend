@@ -59,7 +59,7 @@ class Homework(Base):
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
     teacher_file_url = Column(String, nullable=True, default=None)
-    selected_grade = Column(String(200), nullable=False)  # 선택한 학년반 값
+    selected_grade = Column(String, nullable=False)  # 선택한 학년반 값
     author_id = Column(UUID(as_uuid=True), ForeignKey("teacher_info.id"), index=True)  # 외래 키
 
     # Teacher와의 관계
