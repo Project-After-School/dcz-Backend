@@ -15,7 +15,7 @@ COPY ./requirements.txt /dcz/requirements.txt
 RUN pip install --no-cache-dir -r /dcz/requirements.txt
 
 RUN pip install python-dotenv
-RUN pip install --pre pyhwp
+# RUN pip install --pre pyhwp
 
 COPY . /dcz/
 
