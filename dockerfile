@@ -16,7 +16,7 @@ COPY ./requirements.txt /dcz/requirements.txt
 RUN pip install --no-cache-dir -r /dcz/requirements.txt
 
 RUN pip install lxml 
-RUN pip install -pre pyhwp 
+RUN pip install pyhwp 
 
 
 RUN pip install python-dotenv
