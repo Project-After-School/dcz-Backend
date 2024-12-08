@@ -19,12 +19,13 @@ ARG ACCESS_TOKEN_EXPIRES_MINUTES
 ENV ACCESS_TOKEN_EXPIRES_MINUTES=${ACCESS_TOKEN_EXPIRES_MINUTES}
 
 COPY ./requirements.txt /dcz/requirements.txt
-RUN pip install --no-cache-dir -r /dcz/requirements.txt \
-    && pip install --no-cache-dir pyhwp
+RUN pip install --no-cache-dir -r /dcz/requirements.txt
+
+RUN pip install -user lxml 
+RUN pip install -pre pyhwp 
 
 
 RUN pip install python-dotenv
-
 COPY . /dcz/
 
 EXPOSE 8000
